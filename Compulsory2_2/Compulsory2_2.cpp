@@ -284,8 +284,17 @@ void printMenu(int pos, bool reveal, std::string instaBlackjack, bool blink)
     }
 
     std::cout << std::left << std::setw(width) << "Your sum:";
-    std::cout << std::left << std::setw(width * 2) << player.sum();
 
+    if (player.sum() > 21) { // Print player sum in red if it is over 21, golden if it is 21
+        std::cout << std::left << std::setw(width * 2) << pR << player.sum() << reset;
+    }
+    else if (player.sum() == 21) {
+        std::cout << std::left << std::setw(width * 2) << pY << player.sum() << reset;
+    }
+    else {
+        std::cout << std::left << std::setw(width * 2) << player.sum();
+    }
+    
     if (reveal == true) {
         std::cout << std::left << std::setw(width) << "Dealers sum:";
         std::cout << dealer.sum() << std::endl << std::endl;
@@ -413,14 +422,15 @@ void roundEnding(std::vector <int>* deck, bool* gameWonPtr)
     else if (dealer.sum() < 17) {
         // Draw cards
         while (true) {
-            printMenu(0, true, "", false);
-            Sleep(800);
-            drawCard(deck, 1); // Dealer draws 1 card
-            printMenu(0, true, "", true);
+            printMenu(0, true, "", false); // Reveal dealer cards
             Sleep(1000);
+            drawCard(deck, 1); // Dealer draws 1 card
+            printMenu(0, true, "", true); // Reveal new card
+            std::cout << "Dealer has drawn a new card!" << std::endl;
+            Sleep(800);
             printMenu(0, true, "", false);
             std::cout << "Dealer has drawn a new card!" << std::endl;
-            Sleep(1500);
+            Sleep(1000);
             aiSelection();  // Ace cards are arranged in the optimal order, if the dealer has an ace
             printMenu(0, true, "", false);
 
