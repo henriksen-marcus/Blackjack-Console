@@ -37,7 +37,6 @@ void login()
     std::vector <std::string> userInfoArr{};
     std::vector <user> users{};
 
-
     if (file.is_open() == false)
     {
         file.open("users.txt", std::ios::in);
@@ -558,7 +557,6 @@ void chooseAces()
         case 8:  // Backspace key
             return;
             break;
-
         }
     }
 }
