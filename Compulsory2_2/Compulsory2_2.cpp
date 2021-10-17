@@ -426,13 +426,11 @@ void roundEnding(std::vector <int>* deck, bool* gameWonPtr)
             drawCard(deck, 1); // Dealer draws 1 card
             printMenu(0, true, "", true); // Reveal new card
             std::cout << "Dealer has drawn a new card!" << std::endl;
-            Sleep(800);
+            Sleep(1000);
             printMenu(0, true, "", false);
             std::cout << "Dealer has drawn a new card!" << std::endl;
-            Sleep(1000);
             aiSelection();  // Ace cards are arranged in the optimal order, if the dealer has an ace
             printMenu(0, true, "", true);
-            std::cout << "Dealer has drawn a new card!" << std::endl;
 
             if (checkForBust(1) == true) { // Does the dealer have a bust?
                 std::cout << "Dealer bust! Player wins!" << std::endl;
@@ -684,7 +682,7 @@ void aiSelection()
 void bettingMenu() 
 {
     int width = 18;
-    std::stringstream playerCapital{}, dealerCapital{}, playerBet{}, dealerBet{};
+    std::stringstream playerCapital{}, dealerCapital{}, playerBet{};
 
     if (player.capital < 10) {
         player.bet = player.capital;
@@ -708,13 +706,10 @@ void bettingMenu()
         dealerCapital.clear();
         playerBet.str("");
         playerBet.clear();
-        dealerBet.str("");
-        dealerBet.clear();
 
         playerCapital << "$ " << player.capital;
         dealerCapital << "$ " << dealer.capital;
         playerBet << "$ " << player.bet;
-        dealerBet << "$ " << dealer.bet;
 
         std::cout << "Betting Menu" << std::endl << std::endl;
         std::cout << "Use W and S or + and - to increase/decrease your bet." << std::endl;
