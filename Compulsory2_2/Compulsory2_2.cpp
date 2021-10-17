@@ -431,7 +431,8 @@ void roundEnding(std::vector <int>* deck, bool* gameWonPtr)
             std::cout << "Dealer has drawn a new card!" << std::endl;
             Sleep(1000);
             aiSelection();  // Ace cards are arranged in the optimal order, if the dealer has an ace
-            printMenu(0, true, "", false);
+            printMenu(0, true, "", true);
+            std::cout << "Dealer has drawn a new card!" << std::endl;
 
             if (checkForBust(1) == true) { // Does the dealer have a bust?
                 std::cout << "Dealer bust! Player wins!" << std::endl;
@@ -682,54 +683,81 @@ void aiSelection()
 
 void bettingMenu() 
 {
+    int width = 18;
+    std::stringstream playerCapital{}, dealerCapital{}, playerBet{}, dealerBet{};
+
     if (player.capital < 10) {
         player.bet = player.capital;
         player.capital = 0;
+    }
+    else if (dealer.capital == 5) { // $5 can be the minimum bet if one of the players do not have more money
+        player.capital -= 5;
+        player.bet = 5;
     }
     else {
         player.capital -= 10;
         player.bet = 10;
     }
+
     while (true) {
         system("cls");
+        
+        playerCapital.str("");
+        playerCapital.clear();
+        dealerCapital.str("");
+        dealerCapital.clear();
+        playerBet.str("");
+        playerBet.clear();
+        dealerBet.str("");
+        dealerBet.clear();
+
+        playerCapital << "$ " << player.capital;
+        dealerCapital << "$ " << dealer.capital;
+        playerBet << "$ " << player.bet;
+        dealerBet << "$ " << dealer.bet;
+
         std::cout << "Betting Menu" << std::endl << std::endl;
         std::cout << "Use W and S or + and - to increase/decrease your bet." << std::endl;
         std::cout << "Minimum bet is $10." << std::endl << std::endl;
-        std::cout << std::left << std::setw(15) << "Your capital:" << pY << "$ " << player.capital << reset << std::endl;
-        std::cout << std::left << std::setw(15) << "Your bet:" << pY << "$ " << player.bet << reset << std::endl << std::endl;
+        std::cout << std::left << std::setw(width) << "Your capital:";
+        std::cout << std::left << std::setw(width + 8) << pY << playerCapital.str() << reset;
+        std::cout << std::left << std::setw(width) << "Dealers capital:";
+        std::cout << pY << dealerCapital.str() << reset << std::endl;
+        std::cout << std::left << std::setw(width) << "Your bet:" << pY << "$ " << player.bet << reset << std::endl << std::endl;
         std::cout << pB << "Confirm [ENTER]" << reset << std::endl;
        
-
+        // Since bets are in increments of 5, there is no possibility for a bet being anything other than a multiple of 5, so no reason to check for it
         char ch = _getch();
         switch (ch) {
         case 'W':
         case 'w':
         case '+':
-            if (player.bet >= 100 || player.capital < 5) {
-                break;
+            if (player.bet + 5 > dealer.capital || player.bet >= 100 || player.bet == dealer.capital || player.capital == 0) {
+                // Do nothing
             }
-            player.capital -= 5;
-            player.bet += 5;
+            else {
+                player.capital -= 5;
+                player.bet += 5;
+            }
             break;
         case 'S':
         case 's':
         case '-':
-            if (player.bet <= 10) {
-                break;
+            if (dealer.capital >= 10 && player.bet == 10) {
+                // Do nothing
             }
-            player.capital += 5;
-            player.bet -= 5;
+            else if (player.bet < 10) { 
+                // Do nothing
+            }
+            else { 
+                player.capital += 5;
+                player.bet -= 5;
+            }
             break;
         case 13:
             Sleep(100);
-            if (dealer.capital < player.bet) {
-                dealer.bet = dealer.capital;
-                dealer.capital = 0;
-            }
-            else {
-                dealer.capital -= player.bet;
-                dealer.bet = player.bet;
-            }
+            dealer.capital -= player.bet;
+            dealer.bet = player.bet;
             return;
             break;
         }
