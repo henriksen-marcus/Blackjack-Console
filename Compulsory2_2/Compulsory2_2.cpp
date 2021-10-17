@@ -322,7 +322,7 @@ void printMenu(int pos, bool reveal, std::string instaBlackjack, bool blink)
         if (pos == 1) { std::cout << pB << " > "; }
         std::cout << "Hit (draw card)" << reset << std::endl;
         if (pos == 2) { std::cout << pB << " > "; }
-        std::cout << "Stay (dealers turn)" << reset << std::endl;
+        std::cout << "Stand (dealers turn)" << reset << std::endl;
         if (pos == 3) { std::cout << pB << " > "; }
         std::cout << "Switch Aces" << reset << std::endl;
         std::cout << std::endl << std::endl << std::endl;
@@ -367,7 +367,7 @@ void enter(int *pos, std::vector <int> *deck, bool *gameWonPtr)
     case 1: // Hit
         drawCard(deck, 0);
         break;
-    case 2: // Stay
+    case 2: // Stand
         roundEnding(deck, gameWonPtr);
         break;
     case 3: // Switch aces
